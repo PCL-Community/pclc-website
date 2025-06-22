@@ -1,21 +1,58 @@
 <template>
-  <div class="flex h-screen items-center justify-between px-8">
-    <div class="text-left w-1/2">
-      <h1 class="text-6xl font-bold text-blue-600 mb-4">Plain Craft Launcher</h1>
-      <h2 class="text-5xl text-gray-800 mb-4">Community</h2>
-      <p class="text-xl text-gray-600">PCL 非官方社区</p>
+  <div class="flex flex-col items-center">
+    <div class="text-left w-full">
+      <ContentRenderer v-if="orgReadme" :value="orgReadme"/>
+      <div v-else>not found</div>
     </div>
 
-    <div class="text-left w-1/2">
-      <ContentRenderer v-if="orgReadme" :value="orgReadme" />
-      <div v-else>not found</div>
+    <div class="flex flex-wrap mt-8 -mx-2 w-full">
+      <IndexCard
+          class="w-full lg:w-[calc(50%-1rem)] mx-2 mb-4 hover-card"
+          @click="navList"
+      >
+        <template #header>
+          项目列表
+        </template>
+        查看 PCL-Community 组织的项目列表
+      </IndexCard>
+      <IndexCard
+          class="w-full lg:w-[calc(50%-1rem)] mx-2 mb-4 hover-card"
+          @click="navCe"
+      >
+        <template #header>
+          PCL2-CE
+        </template>
+        了解 Plain Craft Launcher 2 Community Edition
+      </IndexCard>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
+import {nav} from "~/utils/Utils";
+
 useHead({
   title: '主页'
 })
 
-const { data: orgReadme } = await useAsyncData(() => queryCollection('content').path('/org_readme').first())
+const {data: orgReadme} = await useAsyncData(() => queryCollection('content').path('/org_readme').first())
+
+const navList = () => {
+  nav('/projects/list')
+}
+
+const navCe = () => {
+  nav('/projects/ce')
+}
 </script>
+
+<style scoped>
+.hover-card {
+  cursor: pointer;
+}
+
+.hover-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+</style>

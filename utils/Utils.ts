@@ -4,3 +4,9 @@ export function open(url: string): void {
   a.target = '_blank';
   a.click();
 }
+
+export function nav(url: string): void {
+  const a = document.createElement('a');
+  a.href = url;
+  a.click();
+}
