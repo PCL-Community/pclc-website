@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 bg-gray-50 w-full">
+  <div class="py-6  w-full">
     <div class="container mx-auto max-w-4xl">
       <div class="border-b border-gray-300 mb-4"/>
       <div class="text-center">
