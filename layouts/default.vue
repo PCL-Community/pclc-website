@@ -5,7 +5,7 @@
     </header>
 
     <main class="flex-grow">
-      <div class="container mx-auto max-w-4xl px-4 sm:px-8 py-6">
+      <div class="leading-relaxed px-4 sm:px-8 py-6">
         <slot />
       </div>
     </main>

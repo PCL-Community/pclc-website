@@ -40,6 +40,7 @@ const items = ref<NavigationMenuItem[]>([
       class="container mx-auto px-4 py-4 flex justify-between items-center"
       style="height: 70px; max-height: 70px; border-bottom: 1px solid #e4e4e4"
   >
+    <img class="mr-4" src="/images/fish.png" alt="logo" width="30">
     <div class="font-bold text-lg">PCL Community</div>
     <div class="mx-auto px-4 py-8">
       <UNavigationMenu :items="items" content-orientation="vertical" class="w-full max-w-4xl mx-auto" />

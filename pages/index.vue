@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col max-w-4xl mx-auto container items-center">
     <div class="text-left w-full">
       <ContentRenderer v-if="orgReadme" :value="orgReadme"/>
       <div v-else>not found</div>

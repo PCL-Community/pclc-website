@@ -20,6 +20,9 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/images/fish.png' }
+      ],
       titleTemplate: '%s - PCL Community'
     }
   },
