@@ -2,9 +2,17 @@
   <ULink
       :href="href"
       target="_blank"
-      class="relative hover:text-primary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-200 hover:after:w-full after:rounded-full"
+      class="group relative text-primary transition-colors duration-200 hover:text-primary"
   >
-    <slot />
+    <span class="relative z-10">
+      <slot/>
+    </span>
+
+    <span
+        class="absolute bottom-0 left-0 h-0.5 w-0 bg-primary dark:bg-primary-dark
+             group-hover:w-full transition-all duration-300 rounded-full
+             dark:group-hover:bg-primary-light"
+    />
   </ULink>
 </template>
 

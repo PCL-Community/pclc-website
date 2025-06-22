@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/content',
-    '@nuxt/image',
     '@nuxt/ui',
     '@compodium/nuxt'
   ],

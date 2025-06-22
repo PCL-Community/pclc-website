@@ -4,7 +4,7 @@
       <AppHeader />
     </header>
 
-    <main style="margin: 0 10%;">
+    <main style="margin: 0 10%;" class="leading-relaxed">
       <slot />
     </main>
 

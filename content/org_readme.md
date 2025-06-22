@@ -1,0 +1,8 @@
+<img src="/images/readme.png" alt="头图" />
+<h3 class="text-4xl font-semibold mt-6 mb-4">欢迎来到 PCL Community🎉 </h3>
+
+你好！欢迎来到 PCL Community，这是 <NavLink href="https://github.com/Hex-Dragon/PCL2/">PCL2</NavLink> 社区中的活跃社区用户们组建成的一个组织，仅是一个社区用户开发者组织，不代表开发者龙腾猫跃和 PCL 官方。
+<br><br>
+我们会在这里一起制作一些有趣的关于 PCL、Minecraft，甚至是其他的一些的小东西，如果你感兴趣的话可以来看看！
+<br><br>
+我们欢迎更多社区玩家加入我们，如有意愿可以在 <NavLink href="https://github.com/orgs/PCL-Community/discussions/categories/%E5%8A%A0%E5%85%A5%E7%BB%84%E7%BB%87-join-us">这里</NavLink> 申请加入，我们会进行综合考虑后邀请您加入交流群。
