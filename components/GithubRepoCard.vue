@@ -16,7 +16,7 @@ const props = defineProps({
   updated: { type: String, required: true },
   forks: { type: String, required: true },
   description: { type: String, required: true },
-  stars: { type: String, required: true },
+  stars: { type: Number, required: true },
 });
 
 const formatDate = (dateString: string) => {

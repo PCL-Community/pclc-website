@@ -28,13 +28,13 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref } from 'vue';
-import { useHead } from '#imports';
+import {ref} from 'vue';
+import {useHead} from '#imports';
 
 interface GithubRepo {
   id: number;
   name: string;
-  stargazers_count: string;
+  stargazers_count: number;
   language: string;
   description: string;
   forks_count: string;
@@ -57,9 +57,12 @@ useHead({ title: '项目列表' });
 async function getOrgRepoList(name: string): Promise<GithubRepo[] | null> {
   try {
     const response = await axios.get<GithubRepo[]>(
-        `https://cdn.akaere.online/api.github.com/orgs/${name}/repos`
+        `https://cdn.akaere.online/api.github.com/orgs/${name}/repos?per_page=100`
     );
-    return response.data;
+
+    return response.data.sort(
+        (a, b) => b.stargazers_count - a.stargazers_count
+    );
   } catch (error) {
     console.error(error);
     return null;
