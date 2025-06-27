@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
-import { open } from '@/utils/Utils'
+import type {NavigationMenuItem} from '@nuxt/ui'
+import {open} from '@/utils/Utils'
 
 const openGithub = () => {
   open('https://github.com/PCL-Community/')
@@ -15,22 +15,10 @@ const items = ref<NavigationMenuItem[]>([
     label: '主页',
     icon: 'lucide:home',
     to: '/',
-  },
-  {
-    label: '项目',
-    icon: 'lucide:app-window',
-    children: [
-      {
-        label: '列表',
-        icon: 'lucide:list',
-        to: '/projects/list'
-      },
-      {
-        label: 'PCL2',
-        icon: 'lucide:box',
-        to: '/components/navigation-menu'
-      }
-    ]
+  }, {
+    label: '项目列表',
+    icon: 'lucide:list',
+    to: '/projects/list'
   }
 ])
 </script>
@@ -43,7 +31,7 @@ const items = ref<NavigationMenuItem[]>([
     <img class="mr-4" src="/images/fish.png" alt="logo" width="30">
     <div class="font-bold text-lg">PCL Community</div>
     <div class="mx-auto px-4 py-8">
-      <UNavigationMenu :items="items" content-orientation="vertical" class="w-full max-w-4xl mx-auto" />
+      <UNavigationMenu :items="items" content-orientation="vertical" class="w-full max-w-4xl mx-auto"/>
     </div>
     <div class="flex items-center space-x-4">
       <UButton
