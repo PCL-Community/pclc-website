@@ -1,5 +1,5 @@
 <template>
-  <UApp class="min-h-screen flex flex-col">
+  <UApp class="min-h-screen flex flex-col prose">
     <header class="sticky top-0 z-50 backdrop-blur-md shadow-sm w-full">
       <AppHeader />
     </header>
