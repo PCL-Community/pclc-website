@@ -57,7 +57,7 @@ useHead({ title: '项目列表' });
 async function getOrgRepoList(name: string): Promise<GithubRepo[] | null> {
   try {
     const response = await axios.get<GithubRepo[]>(
-        `https://cdn.akaere.online/api.github.com/orgs/${name}/repos?per_page=100`
+        `https://api.github.com/orgs/${name}/repos?per_page=100`
     );
 
     return response.data.sort(
