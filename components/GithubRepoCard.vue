@@ -50,9 +50,11 @@ const loadReadme = async () => {
           }
         }
     )
+    readmeHtml.value = response.data
+
     const p = `https://cdn.akaere.online/https://raw.githubusercontent.com/${props.repo.owner.login}/${props.repo.name}/refs/heads/${props.repo.default_branch}/`;
 
-    readmeHtml.value = response.data.replace(/src="([^"]*)"/g, (match: string, p1: string) => {
+    readmeHtml.value = readmeHtml.value.replace(/src="([^"]*)"/g, (match: string, p1: string) => {
       if (p1.startsWith('http')) {
         return match;
       }
@@ -63,8 +65,25 @@ const loadReadme = async () => {
 
       return `src="${p}${p1}"`;
     });
+
+    const f = `https://github.com/${props.repo.owner.login}/${props.repo.name}/blob/${props.repo.default_branch}/`;
+
+    readmeHtml.value = readmeHtml.value.replace(/href="([^"]*)"/g, (match: string, p1: string) => {
+      if (p1.startsWith('http')) {
+        return match;
+      }
+
+      if (p1.startsWith('/')) {
+        return `href="${f}${p1.substring(1)}"`;
+      }
+
+      return `href="${f}${p1}"`;
+    });
+
     readmeHtml.value = readmeHtml.value.replace(`<ul`, `<ul class="list-inside list-disc"`);
     readmeHtml.value = readmeHtml.value.replace(`<ol`, `<ol class="list-inside list-decimal"`);
+    console.log(props.repo)
+    console.log(readmeHtml.value)
   } catch (error) {
     console.error(error)
     readmeHtml.value = '获取 README 失败。'
@@ -81,19 +100,20 @@ const loadReadme = async () => {
         variant="soft"
         class="group relative overflow-visible flex flex-col h-full"
         :ui="{
-      root: 'max-w-md rounded-xl bg-transparent border border-gray-400 transition-all duration-300 dark:border-gray-700 h-full min-h-30'
+      root: 'max-w-md rounded-lg bg-transparent border border-gray-400 transition-all duration-300 dark:border-gray-700 h-full min-h-20'
     }"
         @click="loadReadme"
     >
       <div
-          class="absolute inset-0 rounded-xl border-3 border-transparent group-hover:border-primary transition-all duration-300 pointer-events-none dark:group-hover:border-primary"/>
+          class="absolute inset-0 rounded-lg border-3 border-transparent group-hover:border-primary transition-all duration-300 pointer-events-none dark:group-hover:border-primary"/>
 
       <div class="flex-1 flex flex-col justify-between">
-        <div class="flex items-start gap-3">
+        <div class="flex items-start gap-2">
           <h3 class="font-bold text-lg truncate flex items-center">
             <UIcon v-if="!repo.fork" name="octicon:repo-16" class="flex-shrink-0 mr-2"/>
             <UIcon v-else name="octicon:repo-forked-16" class="flex-shrink-0 mr-2"/>
             <span style="color: #0969DA" class="truncate">{{ repo.name }}</span>
+            <UBadge v-if="repo.archived" color="warning" variant="outline" class="ml-2 font-bold rounded-full">Public Archive</UBadge>
           </h3>
         </div>
 

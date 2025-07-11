@@ -6,6 +6,7 @@ export interface GithubRepo {
     description: string;
     forks_count: string;
     updated_at: string;
+    archived: boolean;
     fork: boolean;
     default_branch: string;
     owner: Owner;

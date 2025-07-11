@@ -34,4 +34,10 @@
     .anchor {
         visibility: hidden !important;
     }
+
+    @media (prefers-color-scheme: dark) {
+        .markdown-body, [data-theme="dark"] {
+            --bgColor-default: transparent !important;
+        }
+    }
 }
