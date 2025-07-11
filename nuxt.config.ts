@@ -31,5 +31,9 @@ export default defineNuxtConfig({
     provider: 'local'
   },
 
-  css: ['~/assets/css/main.css']
+  css: ['~/assets/css/main.css'],
+
+  nitro: {
+    preset: 'static',
+  }
 })
