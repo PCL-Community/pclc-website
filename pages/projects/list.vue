@@ -12,14 +12,7 @@
           class="h-full"
       >
       <GithubRepoCard
-          owner="PCL-Community"
-          :repo="repo.name"
-          :stars="repo.stargazers_count"
-          :name="repo.name"
-          :language="repo.language"
-          :updated="repo.updated_at"
-          :description="repo.description"
-          :forks="repo.forks_count"
+          :repo="repo"
       />
     </div>
   </div>
@@ -31,15 +24,6 @@ import axios from 'axios';
 import {ref} from 'vue';
 import {useHead} from '#imports';
 
-interface GithubRepo {
-  id: number;
-  name: string;
-  stargazers_count: number;
-  language: string;
-  description: string;
-  forks_count: string;
-  updated_at: string;
-}
 
 const repos = ref<GithubRepo[]>([]);
 const isLoading = ref(true);
@@ -57,7 +41,7 @@ useHead({ title: '项目列表' });
 async function getOrgRepoList(name: string): Promise<GithubRepo[] | null> {
   try {
     const response = await axios.get<GithubRepo[]>(
-        `https://api.github.com/orgs/${name}/repos?per_page=100`
+        `https://cdn.akaere.online/https://api.github.com/orgs/${name}/repos?per_page=100`
     );
 
     return response.data.sort(

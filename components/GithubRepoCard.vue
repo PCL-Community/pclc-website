@@ -1,59 +1,89 @@
 <script setup lang="ts">
-import axios from 'axios';
-import {format} from 'date-fns';
-import {zhCN} from 'date-fns/locale';
+import axios from 'axios'
 
 interface LanguageColor {
-  color: string;
-  url: string;
+  color: string
+  url: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  owner: {type: String, required: true},
-  name: {type: String, required: true},
-  language: {type: String, required: true},
-  updated: {type: String, required: true},
-  forks: {type: String, required: true},
-  description: {type: String, required: true},
-  stars: {type: Number, required: true},
-});
+  repo: {
+    type: Object as () => GithubRepo,
+    required: true
+  }
+})
 
-const formatDate = (dateString: string) => {
-  return format(new Date(dateString), 'yyyy年MM月dd日', {locale: zhCN});
-};
-
-const languageColors = useState<Record<string, LanguageColor>>('github-colors', () => ({}));
-const colorsError = ref<Error | null>(null);
-const colorsLoading = ref(false);
+const languageColors = useState<Record<string, LanguageColor>>('github-colors', () => ({}))
+const colorsError = ref<Error | null>(null)
+const colorsLoading = ref(false)
 
 if (Object.keys(languageColors.value).length === 0 && !colorsError.value) {
   try {
-    const response = await axios.get('/github-colors.json');
-    languageColors.value = response.data;
+    const response = await axios.get('/github-colors.json')
+    languageColors.value = response.data
   } catch (err) {
-    colorsError.value = err as Error;
+    colorsError.value = err as Error
   } finally {
-    colorsLoading.value = false;
+    colorsLoading.value = false
   }
 }
 
 const getLanguageColor = (language: string | null): string => {
-  if (!language) return '#cccccc';
-  return languageColors.value[language]?.color || '#cccccc';
-};
+  if (!language) return '#cccccc'
+  return languageColors.value[language]?.color || '#cccccc'
+}
 
+const readmeHtml = ref('')
+const readmeLoading = ref(false)
+const readmeError = ref<Error | null>(null)
 
+const loadReadme = async () => {
+  if (readmeHtml.value || readmeLoading.value) return
+
+  readmeLoading.value = true
+  try {
+    const response = await axios.get(
+        `https://api.github.com/repos/${props.repo.owner.login}/${props.repo.name}/contents/README.md`,
+        {
+          headers: {
+            Accept: 'application/vnd.github.html+json'
+          }
+        }
+    )
+    const p = `https://cdn.akaere.online/https://raw.githubusercontent.com/${props.repo.owner.login}/${props.repo.name}/refs/heads/${props.repo.default_branch}/`;
+
+    readmeHtml.value = response.data.replace(/src="([^"]*)"/g, (match: string, p1: string) => {
+      if (p1.startsWith('http')) {
+        return match;
+      }
+
+      if (p1.startsWith('/')) {
+        return `src="${p}${p1.substring(1)}"`;
+      }
+
+      return `src="${p}${p1}"`;
+    });
+    readmeHtml.value = readmeHtml.value.replace(`<ul`, `<ul class="list-inside list-disc"`);
+    readmeHtml.value = readmeHtml.value.replace(`<ol`, `<ol class="list-inside list-decimal"`);
+  } catch (error) {
+    console.error(error)
+    readmeHtml.value = '获取 README 失败。'
+    readmeError.value = error as Error
+  } finally {
+    readmeLoading.value = false
+  }
+}
 </script>
 
 <template>
-  <UModal title="项目详情" :description="owner + '/' + name" :ui="{ footer: 'justify-end' }">
+  <UModal class="cursor-pointer" title="项目详情" :description="repo.owner.login + '/' + repo.name" :ui="{ footer: 'justify-end' }">
     <UCard
         variant="soft"
-        :ui="{
-      root: 'max-w-md rounded-xl bg-transparent border border-gray-400 shadow-lg hover:shadow-xl transition-all duration-300 dark:border-gray-700 p-1 h-full min-h-40'
-    }"
         class="group relative overflow-visible flex flex-col h-full"
+        :ui="{
+      root: 'max-w-md rounded-xl bg-transparent border border-gray-400 transition-all duration-300 dark:border-gray-700 h-full min-h-30'
+    }"
+        @click="loadReadme"
     >
       <div
           class="absolute inset-0 rounded-xl border-3 border-transparent group-hover:border-primary transition-all duration-300 pointer-events-none dark:group-hover:border-primary"/>
@@ -61,55 +91,60 @@ const getLanguageColor = (language: string | null): string => {
       <div class="flex-1 flex flex-col justify-between">
         <div class="flex items-start gap-3">
           <h3 class="font-bold text-lg truncate flex items-center">
-            <UIcon name="octicon:repo-16" class="flex-shrink-0 mr-2"/>
-            <span style="color: #0969DA" class="truncate">{{ name }}</span>
+            <UIcon v-if="!repo.fork" name="octicon:repo-16" class="flex-shrink-0 mr-2"/>
+            <UIcon v-else name="octicon:repo-forked-16" class="flex-shrink-0 mr-2"/>
+            <span style="color: #0969DA" class="truncate">{{ repo.name }}</span>
           </h3>
         </div>
 
         <p
-            v-if="description"
-            class="text-gray-600 dark:text-gray-400 mt-2 text-sm line-clamp-1"
+            v-if="repo.description"
+            class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1"
         >
-          {{ description }}
+          {{ repo.description }}
         </p>
-        <p v-else class="text-gray-400 dark:text-gray-500 mt-2 text-sm italic">
+        <p v-else class="text-gray-400 dark:text-gray-500 text-sm italic">
           无项目描述
         </p>
       </div>
 
       <div class="flex flex-wrap gap-4 mt-4 text-xs text-gray-500 dark:text-gray-400">
-        <div v-if="language" class="flex items-center">
+        <div v-if="repo.language" class="flex items-center">
           <div
               class="w-3 h-3 rounded-full mr-1"
-              :style="{ backgroundColor: getLanguageColor(language) }"
+              :style="{ backgroundColor: getLanguageColor(repo.language) }"
           />
-          {{ language }}
+          {{ repo.language }}
         </div>
 
         <div class="flex items-center">
           <UIcon name="octicon:star-16" class="mr-1"/>
-          {{ stars }}
+          {{ repo.stargazers_count }}
         </div>
 
         <div class="flex items-center">
           <UIcon name="octicon:repo-forked-16" class="mr-1 text-gray-500"/>
-          {{ forks }}
+          {{ repo.forks_count }}
         </div>
-      </div>
-
-      <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-        <UIcon name="octicon:clock-16" class="mr-1 inline align-middle"/>
-        <span class="align-middle">更新于 {{ formatDate(updated) }}</span>
       </div>
     </UCard>
 
     <template #body>
+      <div v-if="readmeLoading" class="flex flex-col items-center justify-center h-64">
+        <UIcon name="svg-spinners:ring-resize" class="text-primary" size="100" />
+        <span class="mt-4 font-bold text-xl text-primary">正在加载</span>
+      </div>
 
+      <div v-else class="max-h-96 list-inside list-disc overflow-auto prose dark:prose-invert max-w-none" v-html="readmeHtml"></div>
     </template>
 
     <template #footer>
-      <UButton label="在 Github 查看" color="primary" icon="simple-icons:github"/>
+      <UButton target="_blank" :to="`https://github.com/${repo.owner.login}/${repo.name}`" label="在 Github 查看" color="primary" icon="simple-icons:github"/>
     </template>
   </UModal>
 
 </template>
+
+<style scoped>
+
+</style>

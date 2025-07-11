@@ -1,4 +1,6 @@
-![头图](/images/readme.png):br
+![头图](/images/readme.png)
+
+:br
 
 ### 欢迎来到 PCL Community🎉
 

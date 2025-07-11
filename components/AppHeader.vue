@@ -1,14 +1,5 @@
 <script setup lang="ts">
 import type {NavigationMenuItem} from '@nuxt/ui'
-import {open} from '@/utils/Utils'
-
-const openGithub = () => {
-  open('https://github.com/PCL-Community/')
-}
-
-const openBilibili = () => {
-  open('https://space.bilibili.com/3546847192811755')
-}
 
 const items = ref<NavigationMenuItem[]>([
   {
@@ -40,7 +31,8 @@ const items = ref<NavigationMenuItem[]>([
           size="xl"
           color="neutral"
           variant="link"
-          @click="openGithub"
+          to="https://github.com/PCL-Community/"
+          target="_blank"
       />
       <UButton
           class="text-2xl"
@@ -48,7 +40,8 @@ const items = ref<NavigationMenuItem[]>([
           size="xl"
           color="neutral"
           variant="link"
-          @click="openBilibili"
+          to="https://space.bilibili.com/3546847192811755"
+          target="_blank"
       />
     </div>
   </div>

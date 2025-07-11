@@ -2,7 +2,7 @@
   <UCard
       variant="soft"
       :ui="{
-      root: 'bg-transparent border-0 shadow hover:shadow-lg transition-all duration-300',
+      root: 'bg-transparent border-0 transition-all duration-300',
       body: 'p-0',
       header: ''
     }"
